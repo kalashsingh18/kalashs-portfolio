@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Page</title>
+</head>
+<body>
+  <h1>Test Page</h1>
+  <p>This is a test page to check if there's any redirection happening.</p>
+  <script>
+    // Log any redirection attempts
+    console.log('Current URL:', window.location.href);
+    
+    // Check if there's any redirection happening
+    const originalPushState = history.pushState;
+    history.pushState = function() {
+      console.log('pushState called with:', arguments);
+      return originalPushState.apply(this, arguments);
+    };
+    
+    const originalReplaceState = history.replaceState;
+    history.replaceState = function() {
+      console.log('replaceState called with:', arguments);
+      return originalReplaceState.apply(this, arguments);
+    };
+    
+    // Check for window.location changes
+    let lastHref = window.location.href;
+    setInterval(() => {
+      if (window.location.href !== lastHref) {
+        console.log('Location changed from', lastHref, 'to', window.location.href);
+        lastHref = window.location.href;
+      }
+    }, 100);
+  </script>
+</body>
+</html>
